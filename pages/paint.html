@@ -1,0 +1,1204 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>画图</title>
+    <link rel="stylesheet" href="../assets/css/component.css">
+    <style>
+        /*全局*/
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .window {
+            width: 100%;
+            height: 100%;
+            padding-bottom: 2rem;
+            background: #D1DBE9;
+            overflow: hidden;
+            font-family: "微软雅黑";
+        }
+
+        .divider {
+            position: relative;
+            flex-grow: 0;
+            padding: 0 1rem;
+            line-height: 2rem;
+            border-right: 1px solid #D7D7D7;
+        }
+
+        .divider:last-child {
+            border-right: 0;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-grow-1 {
+            flex-grow: 1;
+        }
+        /*bar*/
+
+        .bar {
+            display: -webkit-flex;
+            /* Safari */
+            display: flex;
+            width: 100%;
+            min-height: 2rem;
+            background: #FFFFFF;
+        }
+
+        .tab-bar {
+            border-bottom: 1px solid #DADBDC;
+        }
+
+        .tool-bar {
+            height: 7.8rem;
+            border-bottom: #DADBDC;
+            background: #F5F6F7;
+        }
+
+        .info-bar {
+            position: absolute;
+            bottom: 0;
+            background: #F0F0F0;
+        }
+        /*bar内容*/
+
+        .title-bar-left {
+            order: 0;
+            flex-grow: 1;
+            line-height: 2rem;
+            color: #666;
+        }
+
+        .title-bar-right {
+            display: flex;
+            order: 1;
+            flex-grow: 0;
+            line-height: 2rem;
+            color: #666;
+        }
+
+        .bar-right-button {
+            width: 2rem;
+            text-align: center;
+        }
+
+        .bar-right-button:hover {
+            background: #E8EFF7;
+        }
+
+        .title-bar-button {
+            width: 1.4rem;
+            vertical-align: middle;
+        }
+
+        .title-bar-divider {
+            position: relative;
+            top: -1px;
+        }
+        /*---tab-bar内容*/
+
+        .tab-bar-item {
+            flex-grow: 0;
+            width: 3.8rem;
+            position: relative;
+            top: 1px;
+            line-height: 2rem;
+            border: 1px solid #FFFFFF;
+            border-bottom: 1px solid #DADBDC;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .tab-bar-item.active {
+            border: 1px solid #DADBDC;
+            background: #F5F6F7;
+            border-bottom: 1px solid #F5F6F7;
+        }
+
+        .tab-bar-item.file {
+            height: 1.8rem;
+            line-height: 1.8rem;
+            border: 0;
+            color: #FFFFFF;
+            background: #298CE1;
+        }
+        /*---tool-bar内容*/
+
+        .tool-bar-content {
+            flex-grow: 1;
+            margin: 0.2rem 0;
+            display: none;
+            font-size: 0.85rem;
+            letter-spacing: normal;
+        }
+
+        .tool-bar-content.active {
+            display: flex;
+        }
+
+        .tool-bar .divider {
+            padding: 0 0.3rem;
+        }
+
+        .tool-bar .divider:last-child {
+            border-right: 1px solid #D7D7D7;
+        }
+
+        .tool-list {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+            padding: 0;
+            width: 6rem;
+            list-style: none;
+        }
+
+        .tool-item {
+            box-sizing: border-box;
+            width: 2rem;
+            height: 2rem;
+            line-height: 2rem;
+            border: 1px solid transparent;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .tool-item:hover {
+            border: 1px solid #A4CEF9;
+            background: #E8EFF7;
+        }
+
+        .tool-item.active {
+            border: 1px solid #62A2E4;
+            background: #C9E0F7;
+        }
+
+        .tool-item img {
+            width: 60%;
+            vertical-align: text-top;
+        }
+
+        .tool-list.list-style {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            width: auto;
+            list-style: none;
+        }
+
+        .tool-list.list-style .tool-item {
+            box-sizing: border-box;
+            width: auto;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            padding: 0 0.5rem;
+            border: 1px solid transparent;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .tool-list.list-style .tool-item img {
+            margin-right: 0.2rem;
+            width: 1rem;
+            vertical-align: text-top;
+        }
+
+        .tool-list.list-style .tool-item:hover {
+            border: 1px solid #A4CEF9;
+            background: #E8EFF7;
+        }
+
+        .tool-list.list-style .tool-item.active {
+            border: 1px solid #62A2E4;
+            background: #C9E0F7;
+        }
+
+        .tool-list.color-list {
+            margin: 0.2rem;
+            padding: 0;
+            width: 13.5rem;
+        }
+
+        .tool-list.color-list .tool-item {
+            box-sizing: border-box;
+            margin: 1px;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 1px solid #A0A0A0;
+            cursor: pointer;
+        }
+
+        .tool-list.color-list .tool-item:hover {
+            border: 1px solid #A4CEF9;
+            background: #E8EFF7;
+        }
+
+        .tool-name {
+            position: absolute;
+            width: 100%;
+            bottom: 0.2rem;
+            left: 0;
+            line-height: normal;
+            text-align: center;
+            color: #666;
+        }
+
+        .tool-commonuse {
+            margin: 0.2rem;
+            width: 3rem;
+            text-align: center;
+        }
+
+        .tool-commonuse:hover .commonuse-icon {
+            border: 1px solid #C4D3E2;
+        }
+
+        .tool-commonuse:hover .commonuse-button {
+            border: 1px solid #93BEEA;
+            border-top: 0;
+        }
+
+        .tool-commonuse.active .commonuse-icon {
+            border: 1px solid #93BEEA;
+            background: #C9E0F7;
+        }
+
+        .tool-commonuse.active .commonuse-button {
+            border: 1px solid #62A2E4;
+            border-top: 0;
+            background: #C9E0F7;
+        }
+
+        .commonuse-icon {
+            padding: 0.2rem;
+            border: 1px solid transparent;
+            text-align: center;
+        }
+
+        .commonuse-icon:hover {
+            background: #E8EFF7;
+        }
+
+        .commonuse-icon img {
+            width: 80%;
+        }
+
+        .commonuse-button {
+            min-height: 2.2rem;
+            line-height: normal;
+            border: 1px solid transparent;
+            border-top: 0;
+        }
+
+        .commonuse-button:hover {
+            background: #E8EFF7;
+        }
+
+        .dotted-box-icon {
+            margin: 0 auto;
+            width: 2.2rem;
+            height: 2rem;
+            border: 1px dashed #1A6AAB;
+        }
+
+        .color-1,
+        .color-pick-icon {
+            box-sizing: border-box;
+            margin: 0 auto;
+            width: 2.2rem;
+            height: 2.2rem;
+            padding: 2px;
+            border: 1px dashed #808080;
+        }
+
+        .color-2 {
+            box-sizing: border-box;
+            margin: 0 auto;
+            width: 2rem;
+            height: 2rem;
+            padding: 2px;
+            border: 1px dashed #808080;
+        }
+
+        .color-1-value {
+            height: 100%;
+            background: #f00;
+        }
+
+        .color-2-value {
+            height: 100%;
+            background: #0f0;
+        }
+
+        .color-pick-value {
+            height: 100%;
+            background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, indigo, purple);
+            /* Safari 5.1 - 6.0 */
+            background: -o-linear-gradient(right, red, orange, yellow, green, blue, indigo, purple);
+            /* Opera 11.1 - 12.0 */
+            background: -moz-linear-gradient(right, red, orange, yellow, green, blue, indigo, purple);
+            /* Firefox 3.6 - 15 */
+            background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, purple);
+            /* 标准的语法 */
+        }
+        /*画布*/
+
+        .content {
+            padding: 0.5rem;
+        }
+
+        .canvas {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            background: #FFFFFF;
+            box-shadow: 0.5rem 0.5rem 0.5rem #ABB8CA;
+        }
+
+        .drag-handle {
+            position: absolute;
+            display: inline-block;
+            width: 0.5rem;
+            height: 0.5rem;
+            border: 1px solid #000000;
+            background: #FFFFFF;
+        }
+
+        .handle-1 {
+            top: 50%;
+            right: -0.5rem;
+            cursor: e-resize;
+        }
+
+        .handle-2 {
+            bottom: -0.5rem;
+            right: -0.5rem;
+            cursor: se-resize;
+        }
+
+        .handle-3 {
+            bottom: -0.5rem;
+            right: 50%;
+            cursor: s-resize;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window">
+        <div class="bar title-bar">
+            <div class="title-bar-left">
+                <img class="title-bar-button" src="../assets/images/调色板.png" alt="logo">
+                <spa class="title-bar-divider">|</span>
+                    <img class="title-bar-button" src="../assets/images/保存.png" alt="保存">
+                    <img class="title-bar-button" src="../assets/images/撤销.png" alt="撤销">
+                    <img class="title-bar-button" src="../assets/images/重做-灰色.png" alt="重做">
+                    <span id="toolbar" class="fa fa-caret-down"></span>
+                    <span class="title-bar-divider">|</span>
+                    <span>无标题-画图</span>
+            </div>
+            <div class="title-bar-right">
+                <div class="bar-right-button">
+                    <span class="fa fa-window-minimize"></span>
+                </div>
+                <!--<div class="bar-right-button">
+                    <span class="fa fa-window-maximize"></span>
+                </div>-->
+                <div class="bar-right-button">
+                    <span class="fa fa-window-restore"></span>
+                </div>
+                <div class="bar-right-button">
+                    <span class="fa fa-times"></span>
+                </div>
+            </div>
+        </div>
+        <div class="bar tab-bar">
+            <div id="file" class="tab-bar-item file">文件</div>
+            <div class="tab-bar-item home active">主页</div>
+            <div class="tab-bar-item view">查看</div>
+        </div>
+        <div class="bar tool-bar">
+            <div class="tool-bar-content tools-home active">
+                <div class="divider">
+                    <div class="flex">
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/粘贴.png" alt="">
+                            </div>
+                            <div id="paste" class="commonuse-button">
+                                <div>粘贴<br/><span class="fa fa-caret-down"></span></div>
+                            </div>
+                        </div>
+                        <ul class="tool-list list-style">
+                            <li class="tool-item" title="剪刀">
+                                <img src="../assets/images/剪刀.png" alt="剪刀"> 剪切
+                            </li>
+                            <li class="tool-item" title="复制">
+                                <img src="../assets/images/复制.png" alt="复制"> 复制
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tool-name">剪贴板</div>
+                </div>
+                <div class="divider">
+                    <div class="flex">
+                        <div class="tool-commonuse area-select">
+                            <div class="commonuse-icon">
+                                <div class="dotted-box-icon"></div>
+                            </div>
+                            <div id="select" class="commonuse-button">
+                                <div>选择<br/><span class="fa fa-caret-down"></span></div>
+                            </div>
+                        </div>
+                        <ul class="tool-list list-style">
+                            <li class="tool-item" title="裁剪">
+                                <img src="../assets/images/裁剪.png" alt="裁剪"> 裁剪
+                            </li>
+                            <li class="tool-item" title="调整大小">
+                                <img src="../assets/images/调整大小.png" alt="调整大小"> 调整大小
+                            </li>
+                            <li id="rotate" class="tool-item" title="旋转">
+                                <img src="../assets/images/旋转.png" alt="旋转"> 旋转
+                                <span class="fa fa-caret-down"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tool-name">图像</div>
+                </div>
+                <div class="divider">
+                    <ul class="tool-list tool-area">
+                        <li class="tool-item" data-name="pencil" title="铅笔">
+                            <img src="../assets/images/铅笔.png" alt="铅笔">
+                        </li>
+                        <li class="tool-item" data-name="fill" title="用颜色填充">
+                            <img src="../assets/images/油漆刷.png" alt="用颜色填充">
+                        </li>
+                        <li class="tool-item" data-name="text" title="文本">
+                            <img src="../assets/images/文本.png" alt="文本">
+                        </li>
+                        <li class="tool-item" data-name="eraser" title="橡皮擦">
+                            <img src="../assets/images/橡皮擦.png" alt="橡皮擦">
+                        </li>
+                        <li class="tool-item" data-name="straw" title="吸管">
+                            <img src="../assets/images/吸管.png" alt="吸管">
+                        </li>
+                        <li class="tool-item" data-name="big" title="放大镜">
+                            <img src="../assets/images/放大镜.png" alt="放大镜">
+                        </li>
+                    </ul>
+                    <div class="tool-name flex-grow-1">
+                        工具
+                    </div>
+                </div>
+                <div class="divider">
+                    <div class="flex">
+                        <div class="tool-commonuse tool-brush">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/油漆刷.png" alt="">
+                            </div>
+                            <div id="brush" class="commonuse-button">
+                                <div>刷子<br/><span class="fa fa-caret-down"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider">
+                    <div class="flex">
+                        <ul class="tool-list list-style">
+                            <li class="tool-item" title="轮廓">
+                                <img src="../assets/images/轮廓.png" alt="轮廓"> 轮廓
+                            </li>
+                            <li class="tool-item" title="填充">
+                                <img src="../assets/images/填充.png" alt="填充"> 填充
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tool-name">形状</div>
+                </div>
+                <div class="divider">
+                    <div class="flex">
+                        <div data-value="0.5" class="tool-commonuse line-width">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/粗细线条.png" alt="">
+                            </div>
+                            <div id="thickness" class="commonuse-button">
+                                <div>粗细<br/><span class="fa fa-caret-down"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider">
+                    <div class="flex">
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <div class="color-1">
+                                    <div class="color-1-value"></div>
+                                </div>
+                            </div>
+                            <div class="commonuse-button">
+                                <div>颜色1</div>
+                            </div>
+                        </div>
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <div class="color-2">
+                                    <div class="color-2-value"></div>
+                                </div>
+                            </div>
+                            <div class="commonuse-button">
+                                <div>颜色2</div>
+                            </div>
+                        </div>
+                        <ul class="tool-list color-list">
+                            <!--颜色选择，JS加载-->
+                        </ul>
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <div class="color-pick-icon">
+                                    <div class="color-pick-value"></div>
+                                </div>
+                            </div>
+                            <div class="commonuse-button">
+                                <div>编辑<br/>颜色</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-name">颜色</div>
+                </div>
+            </div>
+            <div class="tool-bar-content tools-view">
+                <div class="divider">
+                    <div class="flex">
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/放大.png" alt="">
+                            </div>
+                            <div class="commonuse-button">
+                                <div>放大</div>
+                            </div>
+                        </div>
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/缩小.png" alt="">
+                            </div>
+                            <div class="commonuse-button">
+                                <div>缩小</div>
+                            </div>
+                        </div>
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/放大镜.png" alt="">
+                            </div>
+                            <div class="commonuse-button">
+                                <div>100%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-name">缩放</div>
+                </div>
+                <div class="divider">
+                    <ul class="tool-list list-style">
+                        <li class="tool-item" title="标尺">
+                            <img src="../assets/images/uncheck.png" alt="标尺"> 标尺
+                        </li>
+                        <li class="tool-item" title="网格线">
+                            <img src="../assets/images/uncheck.png" alt="网格线"> 网格线
+                        </li>
+                        <li class="tool-item" title="状态栏">
+                            <img src="../assets/images/uncheck.png" alt="状态栏"> 状态栏
+                        </li>
+                    </ul>
+                    <div class="tool-name">显示或隐藏</div>
+                </div>
+                <div class="divider">
+                    <div class="flex">
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/全屏.png" alt="">
+                            </div>
+                            <div class="commonuse-button">
+                                <div>全屏</div>
+                            </div>
+                        </div>
+                        <div class="tool-commonuse">
+                            <div class="commonuse-icon">
+                                <img src="../assets/images/照片.png" alt="">
+                            </div>
+                            <div class="commonuse-button">
+                                <div>缩略图</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-name flex-grow-1">
+                        显示
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="canvas">
+                <span class="drag-handle handle-1"></span>
+                <span class="drag-handle handle-2"></span>
+                <span class="drag-handle handle-3"></span>
+                <canvas id="canvas" width="400" height="300">
+                    Your browser does not support the HTML5 canvas tag.
+                </canvas>
+            </div>
+        </div>
+        <div class="bar info-bar">
+            <div class="divider">
+                <span class="fa fa-crosshairs"></span>
+                <span class="cursor-position">0,0 像素</span>
+            </div>
+            <div class="divider">
+            </div>
+            <div class="divider">
+                <span class="fa fa-arrows"></span>
+                <span class="canvas-size"></span>
+            </div>
+            <div class="divider">
+            </div>
+            <div class="divider flex-grow-1">
+
+            </div>
+            <div class="divider">
+
+            </div>
+        </div>
+    </div>
+    <script src="../assets/lib/jQuery/jquery.min.js"></script>
+    <script src="../assets/js/component.js"></script>
+    <script>
+        $(function () {
+            // 一些公共的全局变量
+            var offsetX = $(".canvas").offset().left; // 当前画布距离文档左边界距离
+            var offsetY = $(".canvas").offset().top; // 当前画布距离文档顶边界距离
+            var _canvas = document.getElementById("canvas");
+            var _ctx = _canvas.getContext("2d");
+            var _canvasData = null; // 当前画布内容
+            var minWidth = 10; // 画布最小宽度
+            var minHeight = 10; // 画布最小高度
+
+            // 创建拖拽对象
+            var dragObject = { handleIndex: undefined };
+            // 创建绘画对象
+            var drawObject = { enabled: false };
+            // 创建执行对象 画笔、笔刷、形状、选区等 
+            var performObject = {
+                type: undefined, // 工具泛类
+                name: undefined, // 工具名称
+                describe: {
+                    // 工具特性描述
+                    eraser: {
+                        size: 5, // 大小
+                        max: 20, // 可调节至最大值
+                        min: 2, // 可调节至最小值
+                    }
+                }
+            };
+
+            var toolbar = new Menu({ // 自定义快速访问工具栏
+                name: "toolbar",
+                triggerId: "toolbar",
+                data: [{
+                    header: "item-header",
+                    title: "自定义快速访问工具栏"
+                }, {
+                    title: "新建"
+                }]
+            });
+            var file = new Menu({ // 自定义快速访问工具栏
+                name: "file",
+                triggerId: "file",
+                data: [{
+                    title: "新建",
+                    icon: "fa fa-file-o",
+                    value: "new"
+                }, {
+                    title: "打开",
+                    icon: "fa fa-folder-open",
+                    value: "open"
+
+                }, {
+                    title: "保存",
+                    icon: "fa fa-floppy-o",
+                    value: "save"
+                }]
+            });
+            file.$menu.on("click", ".pop-menu-item", function () {
+                var value = $(this).attr("data-value");
+                switch (value) {
+                    case "new":
+                        break;
+                    case "open":
+                        var url = null;
+                        var _file = null;
+                        if ($("#open-file").length > 0) {
+                            $("#open-file").trigger("click");
+                        } else {
+                            var file = $("<input id='open-file' type='file' />");
+                            file.css("display", "none");
+                            $("body").append(file);
+                            $("#open-file").trigger("click");
+                            file.on("change", function () {
+                                var fileEle = $("#open-file")[0];
+                                if (fileEle && fileEle.files && fileEle.files[0]) {
+                                    _file = fileEle.files[0];
+                                } else {
+                                    _file = fileEle.val();
+                                }
+                                if (window.createObjectURL != undefined) {
+                                    url = window.createObjectURL(_file);
+                                } else if (window.URL != undefined) {
+                                    url = window.URL.createObjectURL(_file);
+                                } else if (window.webkitURL != undefined) {
+                                    url = window.webkitURL.createObjectURL(_file);
+                                }
+                                var img = document.getElementById("file-img");
+                                if (img) {
+                                    img.setAttribute("src", url);
+                                    img.onload = function () {
+                                        _ctx.drawImage(img, 0, 0);
+                                    }
+                                } else {
+                                    var OFI = document.createElement("img"); // open file image
+                                    OFI.setAttribute("id", "file-img");
+                                    OFI.setAttribute("src", url);
+                                    OFI.setAttribute("style", "display:none;");
+                                    document.getElementsByTagName("body")[0].appendChild(OFI);
+                                    img = document.getElementById("file-img");
+                                    img.onload = function () {
+                                        _ctx.drawImage(img, 0, 0);
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                    case "save":
+                        var prompt = new Prompt({
+                            id: "prompt",
+                            name: "save-prompt",
+                            title: "下载图片至本地",
+                            items: [{
+                                label: "文件名称：",
+                                name: "name"
+                            }, {
+                                label: "文件类型：",
+                                name: "type"
+                            }, {
+                                label: "品质：",
+                                name: "quality",
+                                state: "针对JPEG配置"
+                            }],
+                            buttons: [{
+                                text: "取消",
+                                callback: "cancel"
+                            }, {
+                                text: "下载",
+                                callback: "submit"
+                            }]
+                        });
+                        prompt.extend("submit", function () {
+                            var id = this.id + "-img"
+                            var items = this.$input;
+                            var result = {};
+                            $.each(items, function (i, input) {
+                                result[$(input).attr("name")] = $(input).val()
+                            });
+                            var time = new Date();
+                            var img = _canvas.toDataURL("image/" + result.type, (result.type == "jpeg" ? result.quality : ''));
+                            var a = $("<a id='" + time.getTime() + "' href='" + img + "' download='" + result.name + "." + result.type + "'>" + result.name + "." + result.type + "</a>");
+                            a.css("display", "none");
+                            $("body").append(a);
+                            // 这里用trigger的方式不生效，转化dom对象，或内嵌标签通过标签点击冒泡至a标签的方式
+                            $("#" + time.getTime())[0].click();
+                            prompt.hide();
+                            $("#" + time.getTime()).remove();
+                        })
+                        prompt.show();
+                        break;
+                }
+            });
+            var paste = new Menu({ // 粘贴下拉菜单
+                name: "paste",
+                triggerId: "paste",
+                data: [{
+                    title: "粘贴"
+                }, {
+                    title: "粘贴来源"
+                }]
+            });
+            var select = new Menu({ // 选择下拉菜单
+                name: "select",
+                triggerId: "select",
+                data: [{
+                    title: "选择形状",
+                    header: "item-header"
+                }, {
+                    title: "矩形选择(R)",
+                    value: "rect"
+                }, {
+                    title: "自由选择(F)",
+                    value: "free"
+                }, {
+                    title: "选择选项",
+                    header: "item-header"
+                }]
+            });
+            select.$menu.on("click", ".pop-menu-item", function () {
+                var value = $(this).attr("data-value");
+            });
+            var rotate = new Menu({ // 旋转下拉菜单
+                name: "rotate",
+                triggerId: "rotate",
+                data: [{
+                    title: "向右旋转90度(R)",
+                    value: "R-90"
+                }, {
+                    title: "向左旋转90度(L)",
+                    value: "L-90"
+                }, {
+                    title: "旋转180度(T)",
+                    value: "T-180"
+                }, {
+                    title: "垂直旋转(V)",
+                    value: "V-90"
+                }, {
+                    title: "水平旋转(H)",
+                    value: "H-90"
+                }]
+            });
+            rotate.$menu.on("click", ".pop-menu-item", function () {
+                var value = $(this).attr("data-value");
+                var $ele = $("#canvas");
+                $ele.css("transition", "all ease 0.5s");
+                switch (value) {
+                    case "R-90":
+                        $ele.css("transform", "rotateZ(90deg)");
+                        break;
+                    case "L-90":
+                        $ele.css("transform", "rotateZ(-90deg)");
+                        break;
+                    case "T-180":
+                        $ele.css("transform", "rotateZ(180deg)");
+                        break;
+                    case "V-90":
+                        $ele.css("transform", "rotateX(180deg)");
+                        break;
+                    case "H-90":
+                        $ele.css("transform", "rotateY(180deg)");
+                        break;
+                }
+            });
+            var brush = new Menu({ // 笔刷下拉菜单
+                name: "brush",
+                triggerId: "brush",
+                data: [{
+                    title: "<span style='display:inline-block;width:5rem;border-bottom:1px solid #000;'></span>",
+                    value: 1
+                }]
+            });
+            var thickness = new Menu({ // 粗细选择
+                name: "thickness",
+                triggerId: "thickness",
+                data: [{
+                    title: "<span style='display:inline-block;width:5rem;border-top:1px solid #000;'></span>",
+                    value: 1
+                }, {
+                    title: "<span style='display:inline-block;width:5rem;border-top:2px solid #000;'></span>",
+                    value: 2
+                }, {
+                    title: "<span style='display:inline-block;width:5rem;border-top:3px solid #000;'></span>",
+                    value: 3
+                }, {
+                    title: "<span style='display:inline-block;width:5rem;border-top:4px solid #000;'></span>",
+                    value: 4
+                }]
+            });
+            thickness.$menu.on("click", ".pop-menu-item", function () {
+                var value = $(this).attr("data-value");
+                $(".line-width").attr("data-value", value);
+            });
+
+            // 标签栏点击事件绑定
+            $(".tab-bar-item").click(function () {
+                if ($(this).hasClass("file")) {
+                    return
+                } else {
+                    $(this).siblings().removeClass("active");
+                    $(this).addClass("active");
+                    $(".tool-bar-content").removeClass("active");
+                    $(".tool-bar-content:nth-child(" + $(this).index() + ")").addClass("active");
+                }
+            });
+
+            // 获取光标对于画布的相对位置，并设置值
+            function setCursorPosition(e) {
+                if (e.type === "mousemove") {
+                    var cursorX = e.clientX;
+                    var cursorY = e.clientY;
+                    var x = Math.round(cursorX - offsetX);
+                    var y = Math.round(cursorY - offsetY);
+                    $(".cursor-position").html(x + "," + y + " 像素");
+                } else {
+                    $(".cursor-position").html("0,0 像素");
+                }
+            }
+            // 获取画布尺寸
+            function getCanvasSize() {
+                var currentWidth = Math.round($(".canvas").width());
+                var currentHeight = Math.round($(".canvas").height());
+                $(".canvas-size").html(currentWidth + " X " + currentHeight + " 像素");
+            }
+            // 初始化执行工具 
+            function initPerformTools() {
+                if (performObject.type && performObject.name) {
+                    switch (performObject.type) { // 工具区、笔刷、形状三者选择一方清除其他两方项中的active
+                        case "tools":
+                            $(".tool-brush").removeClass("active");
+                            break;
+                        case "brush":
+                            $(".tool-brush").addClass("active");
+                            $(".tool-area .tool-item").removeClass("active");
+                            break;
+                        case "shape":
+                            $(".tool-brush").removeClass("active");
+                            $(".tool-area .tool-item").removeClass("active");
+                            break;
+                    }
+                    switch (performObject.name) { // tool-list点击处理逻辑
+                        case "pencil":
+                            $("#canvas").css("cursor", "url(../assets/images/draw.png), auto");
+                            break;
+                        case "fill":
+                            $("#canvas").css("cursor", "url(../assets/images/油漆刷.png), auto");
+                            break;
+                        case "text":
+                            $("#canvas").css("cursor", "url(../assets/images/文本.png), auto");
+                            break;
+                        case "eraser":
+                            $("#canvas").css("cursor", "url(../assets/images/eraser.png), auto");
+                            break;
+                        case "straw":
+                            $("#canvas").css("cursor", "url(../assets/images/straw.png), auto");
+                            break;
+                        case "big":
+                            $("#canvas").css("cursor", "url(../assets/images/放大镜.png), auto");
+                            break;
+                        case "brush":
+
+                            break;
+                    }
+                }
+            }
+
+            // 拖拽手柄的mousedown事件
+            $(".drag-handle").mousedown(function (e) {
+                if (e.button === 0) {
+                    e.preventDefault(); // 可能触发浏览器识别的的禁止拖拽事件导致拖拽不流畅
+                    e.stopPropagation();
+                    var index = $(this).index() + 1;
+                    dragObject.ele = $(this);
+                    dragObject.handleIndex = index;
+                    canvasData = _ctx.getImageData(0, 0, _canvas.width, _canvas.height);
+                }
+            });
+            // 拖拽手柄的mousemove事件
+            $(".drag-handle").mousemove(function (e) {
+                e.stopPropagation(); // 阻止鼠标在拖拽手柄上移动时冒泡至画布
+            });
+
+            // 监听文档的鼠标移动
+            $(document).mousemove(function (e) {
+                if (dragObject.handleIndex) { // 如果存在拖拽对象则执行相应的代码
+                    var _width = Math.round(e.clientX - offsetX);
+                    var _height = Math.round(e.clientY - offsetY);
+                    (_width < minWidth) && (_width = minWidth);
+                    (_height < minHeight) && (_height = minHeight);
+                    switch (dragObject.handleIndex) {
+                        case 1:
+                            $(".canvas").width(_width);
+                            $("#canvas").attr("width", _width);
+                            $("body").css("cursor", "e-resize");
+                            break;
+                        case 2:
+                            $(".canvas").width(_width);
+                            $(".canvas").height(_height);
+                            $("#canvas").attr("width", _width);
+                            $("#canvas").attr("height", _height);
+                            $("body").css("cursor", "se-resize");
+                            break;
+                        case 3:
+                            $(".canvas").height(_height);
+                            $("#canvas").attr("height", _height);
+                            $("body").css("cursor", "s-resize");
+                            break;
+                    }
+                    _ctx.putImageData(canvasData, 0, 0);
+                    getCanvasSize();
+                }
+            });
+            // 文档上鼠标点击松开
+            $(document).mouseup(function () {
+                if (dragObject.handleIndex) {
+                    _ctx.putImageData(canvasData, 0, 0); // 保留已有的绘画内容
+                }
+                dragObject.handleIndex = undefined; // 将拖拽对象的手柄index置为undefined
+                $("body").css("cursor", "default"); // 还原body的cursor属性
+            });
+            // 文档的键盘按下事件
+            $(document).keydown(function (e) {
+                if (performObject.name) {
+                    switch (performObject.name) {
+                        case "eraser": // 改变当前橡皮擦的大小
+                            if ((e.ctrlKey == true) && (e.key == "]" || e.key == "[")) { // ctrl 和 一些键组合按下时相应的处理
+                                if (e.key == "]") {
+                                    if (performObject.describe.eraser.size < performObject.describe.eraser.max) {
+                                        performObject.describe.eraser.size += 1;
+                                    }
+                                }
+                                if (e.key == "[") {
+                                    if (performObject.describe.eraser.size > performObject.describe.eraser.min) {
+                                        performObject.describe.eraser.size -= 1;
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            });
+
+            // 画布上点击鼠标时
+            $(".canvas").mousedown(function (e) {
+                if (e.button === 0) { // 鼠标左键按下的处理内容
+                    if (performObject.name) { // 存在执行对象，进行后续处理
+                        drawObject.enabled = true;
+                        var lineWidth = $(".line-width").attr("data-value"); // 线条粗细
+                        var foreground = $(".color-1-value").css("background-color"); // 前景色
+                        var background = $(".color-2-value").css("background-color"); // 背景色
+                        var shapeBorder = $(".shape-border").attr("data-value"); // 轮廓
+                        var shapeFill = $(".shape-fill").attr("data-value"); // 填充
+                        switch (performObject.name) {
+                            case "pencil":
+                                _ctx.beginPath();
+                                _ctx.moveTo(Math.floor(e.offsetX), Math.floor(e.offsetY));
+                                _ctx.strokeStyle = foreground;
+                                _ctx.lineWidth = lineWidth;
+                                break;
+                            case "straw":
+                                var imgData = _ctx.getImageData(e.offsetX, e.offsetY, 1, 1);
+                                var red = imgData.data[0];
+                                var green = imgData.data[1];
+                                var blue = imgData.data[2];
+                                var alpha = imgData.data[3];
+                                performObject.describe.straw = "rgba(" + red + ", " + green + ", " + blue + ", " + alpha + ")";
+                                break;
+                            case "eraser":
+                                var size = performObject.describe.eraser.size;
+                                _ctx.clearRect(Math.floor(e.offsetX), Math.floor(e.offsetY), size, size);
+                                break;
+                        }
+                    }
+                }
+            });
+            // 画布上鼠标移动时
+            $(".canvas").mousemove(function (e) {
+                !dragObject.handleIndex && setCursorPosition(e); // 非拖动状态设置光标的位置
+                if (drawObject.enabled) { // 通过控制drawObject对象的可用性来确定是否执行
+                    switch (performObject.name) {
+                        case "pencil":
+                            _ctx.lineTo(Math.floor(e.offsetX), Math.floor(e.offsetY));
+                            _ctx.stroke();
+                            break;
+                        case "eraser":
+                            var size = performObject.describe.eraser.size;
+                            _ctx.clearRect(Math.floor(e.offsetX), Math.floor(e.offsetY), size, size);
+                    }
+                }
+            });
+            // 画布上鼠标弹起时
+            $(".canvas").mouseup(function (e) {
+                drawObject.enabled = false;
+                if (performObject.name) {
+                    switch (performObject.name) {
+                        case "pencil":
+                            _ctx.stroke();
+                            break;
+                        case "straw":
+                            $(".color-1-value").css("background", performObject.describe.straw);
+                            break;
+                    }
+                }
+            });
+            // 画布上鼠标移出时
+            $(".canvas").mouseout(function (e) {
+                setCursorPosition(e); // 设置光标的位置
+                drawObject.enabled = false; // 关闭绘画对象
+                if (performObject.name) {
+                    switch (performObject.name) {
+
+                    }
+                }
+            });
+
+            // 图像区域点击处理
+            // 工具区域点击处理
+            $(".tool-area").on("click", ".tool-item", function () {
+                $(this).siblings(".tool-item").removeClass("active");
+                $(this).addClass("active");
+                var name = $(this).attr("data-name");
+                performObject.type = "tools";
+                performObject.name = name;
+                initPerformTools();
+            });
+            // 刷子点击处理
+            $(".tool-brush").on("click", function (e) {
+                var $target = $(e.target);
+                if ($target.hasClass("commonuse-icon") || ($target.parents(".commonuse-icon").length > 0)) {
+                    performObject.type = "brush";
+                    performObject.name = "brush-1";
+                    initPerformTools();
+                }
+                if ($target.hasClass("commonuse-button") || ($target.parents(".commonuse-button").length > 0)) {
+
+                }
+            });
+            // 形状点击处理
+            // 点击color-list改变颜色1块的颜色
+            $(".color-list").on("click", ".tool-item", function () {
+                $(".color-1-value").css("background", $(this).css("background-color"));
+            });
+
+            // 初始化画布大小
+            getCanvasSize();
+            // 初始化color-list windows画图原色
+            var _color = ["000000", "7F7F7F", "880015", "ED1C24", "FF7F27", "FFF200", "22B14C", "00A2E8", "3F48CC", "A349A4", "FFFFFF", "C3C3C3", "B97A57", "FFAEC9", "FFC90E", "EFE4B0", "B5E61D", "99D9EA", "7092BE", "C8BFE7"];
+            var _color_html = "";
+            $.each(_color, function (i, v) {
+                _color_html += "<li class='tool-item' style='background-color:#" + v + "'></li>";
+            });
+            for (var i = 0; i < 10; i++) {
+                _color_html += "<li class='tool-item'></li>";
+            }
+            $(".color-list").append(_color_html);
+
+        });
+    </script>
+</body>
+
+</html>

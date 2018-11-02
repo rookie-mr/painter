@@ -1,0 +1,162 @@
+/*通用组件*/
+
+.simple-mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/*Menu 组件样式*/
+
+.pop-menu {
+    list-style: none;
+    margin: 0;
+    padding: 1px;
+    border: 1px solid #DCDDDE;
+    background: #fff;
+    box-shadow: 0.1rem 0.1rem 0.1rem #DCDDDE;
+    font-size: 0.86rem;
+}
+
+.pop-menu-item {
+    display: flex;
+    min-width: 8rem;
+    margin: 0;
+    padding: 0;
+    min-height: 1.6rem;
+    line-height: 1.6rem;
+    border: 1px solid transparent;
+    font-family: "微软雅黑";
+}
+
+.pop-menu-item:hover {
+    border: 1px solid #A8D2FD;
+    background: #EDF4FC;
+}
+
+.pop-menu-item.item-header {
+    display: flex;
+    min-width: 8rem;
+    margin: 1px;
+    padding: 0 0.5rem;
+    min-height: 1.6rem;
+    line-height: 1.6rem;
+    border: 0;
+    background: #F6F7F8;
+    font-family: "微软雅黑";
+    font-weight: bold;
+    color: #666;
+    text-align: left;
+}
+
+.pop-menu-item.item-header:hover {
+    border: 0;
+    background: #F6F7F8;
+}
+
+.pop-menu-item.item-header span.item-icon-l, .pop-menu-item.item-header span.item-icon-r {
+    display: none;
+}
+
+.pop-menu-item:hover span.item-icon-l {
+    border: 0;
+}
+
+.item-title {
+    flex-grow: 1;
+}
+
+.item-icon-l, .item-icon-r {
+    display: inline-block;
+    flex-flow: 0;
+    line-height: 1.6rem;
+}
+
+.item-icon-l {
+    margin: 0 0.2rem;
+    width: 1.5rem;
+    border-right: 1px solid #DCDDDE;
+}
+
+.item-icon-r {
+    width: 1rem;
+}
+
+/*Prompt 组件样式*/
+
+.simple-prompt {
+    position: absolute;
+    min-width: 36%;
+    top: 10%;
+    left: 32%;
+    z-index: 100;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    background: #D0DAE8;
+}
+
+.prompt-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: #fff;
+}
+
+.prompt-title {
+    display: flex;
+    border-bottom: 1px solid #D0DAE8;
+}
+
+.prompt-title-value {
+    flex-grow: 1;
+}
+
+.prompt-close {
+    width: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.prompt-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.prompt-item {
+    display: flex;
+    padding: 0.5rem 0;
+    line-height: 1.5rem;
+}
+
+.prompt-item-label {
+    width: 20%;
+    flex-grow: 0;
+}
+
+.prompt-item-control {}
+
+.prompt-item-control input {}
+
+.prompt-item-state {
+    flex-grow: 1;
+    width: 20%;
+    padding-left: 1rem;
+    font-size: 0.86rem;
+    color: #666;
+}
+
+.prompt-buttons {
+    display: flex;
+    flex-direction: row-reverse;
+    border-top: 1px solid #D0DAE8;
+}
+
+.prompt-button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
